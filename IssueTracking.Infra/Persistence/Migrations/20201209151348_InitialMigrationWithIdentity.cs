@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace IssueTracking.API.Persistence.Migrations
+namespace IssueTracking.Infra.Persistence.Migrations
 {
     public partial class InitialMigrationWithIdentity : Migration
     {

@@ -1,4 +1,5 @@
-﻿using IssueTracking.Infra.Identity;
+﻿
+using IssueTracking.Infra.Identity;
 using IssueTracking.Infra.Persistence;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -9,15 +10,14 @@ namespace IssueTracking.Infra
 {
     public static class DependencyInjection
     {
-        public static IServiceCollection AddInfraDI(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection AddInfraDependencyInjection(this IServiceCollection services, IConfiguration configuration)
         {
-            //services.AddDbContext<ApplicationDbContext>(option =>
-            //{
-            //    option.UseSqlServer(configuration.GetConnectionString("IssueTrackingConnection"));
-            //});
-
+            services.AddDbContext<ApplicationDbContext>(option =>
+            {
+                option.UseSqlServer(configuration.GetConnectionString("IssueTrackingConnection"));
+            });
+            services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>();
             return services;
         }
-
     }
 }
