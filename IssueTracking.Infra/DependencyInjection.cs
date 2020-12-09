@@ -1,5 +1,4 @@
-﻿
-using IssueTracking.Infra.Identity;
+﻿using IssueTracking.Domain.Entities.UserAggregate;
 using IssueTracking.Infra.Persistence;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
