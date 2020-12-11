@@ -5,15 +5,15 @@ using IssueTracking.Domain.Interfaces;
 
 namespace IssueTracking.Domain.Entities
 {
-    public class ParticipantsProjects : Entity
+    public class ParticipantsProjects /*: Entity*/
     {
-        public string UserId { get; set; }
+        //public string UserId { get; set; }
 
-        public Guid ProjectId { get; set; }
+        //public Guid ProjectId { get; set; }
 
-        public User Participants { get; set; }
+        //public User Participants { get; set; }
 
-        public Project Projects { get; set; }
+        //public Project Projects { get; set; }
 
     }
 }

@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace IssueTracking.Infra.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20201209191907_InitialMigrationWithIdentityAndEntites")]
-    partial class InitialMigrationWithIdentityAndEntites
+    [Migration("20201211143522_CreateDbSchema")]
+    partial class CreateDbSchema
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -26,8 +26,8 @@ namespace IssueTracking.Infra.Persistence.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("AssigneeId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid?>("AssigneeId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
@@ -48,11 +48,8 @@ namespace IssueTracking.Infra.Persistence.Migrations
                     b.Property<Guid?>("ProjectId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("ReporterId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("SerialNumber")
-                        .HasColumnType("int");
+                    b.Property<Guid?>("ReporterId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -77,42 +74,6 @@ namespace IssueTracking.Infra.Persistence.Migrations
                     b.HasIndex("ReporterId");
 
                     b.ToTable("Issue");
-                });
-
-            modelBuilder.Entity("IssueTracking.Domain.Entities.ParticipantsProjects", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreationDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("ModificationDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("ModifiedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("ProjectId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("SerialNumber")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ProjectId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("ParticipantsProject");
                 });
 
             modelBuilder.Entity("IssueTracking.Domain.Entities.ProjectAggregate.Project", b =>
@@ -142,26 +103,23 @@ namespace IssueTracking.Infra.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("OwnerId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<int>("SerialNumber")
-                        .HasColumnType("int");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
 
                     b.HasKey("Id");
 
                     b.HasIndex("Key")
                         .IsUnique();
 
-                    b.HasIndex("OwnerId");
-
                     b.ToTable("Project");
                 });
 
             modelBuilder.Entity("IssueTracking.Domain.Entities.UserAggregate.User", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
@@ -223,10 +181,11 @@ namespace IssueTracking.Infra.Persistence.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
@@ -250,7 +209,7 @@ namespace IssueTracking.Infra.Persistence.Migrations
                     b.ToTable("AspNetRoles");
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -263,9 +222,8 @@ namespace IssueTracking.Infra.Persistence.Migrations
                     b.Property<string>("ClaimValue")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("RoleId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid>("RoleId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
@@ -274,7 +232,7 @@ namespace IssueTracking.Infra.Persistence.Migrations
                     b.ToTable("AspNetRoleClaims");
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<System.Guid>", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -287,9 +245,8 @@ namespace IssueTracking.Infra.Persistence.Migrations
                     b.Property<string>("ClaimValue")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
@@ -298,7 +255,7 @@ namespace IssueTracking.Infra.Persistence.Migrations
                     b.ToTable("AspNetUserClaims");
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<System.Guid>", b =>
                 {
                     b.Property<string>("LoginProvider")
                         .HasColumnType("nvarchar(450)");
@@ -309,9 +266,8 @@ namespace IssueTracking.Infra.Persistence.Migrations
                     b.Property<string>("ProviderDisplayName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("LoginProvider", "ProviderKey");
 
@@ -320,13 +276,13 @@ namespace IssueTracking.Infra.Persistence.Migrations
                     b.ToTable("AspNetUserLogins");
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<System.Guid>", b =>
                 {
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("RoleId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid>("RoleId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("UserId", "RoleId");
 
@@ -335,10 +291,10 @@ namespace IssueTracking.Infra.Persistence.Migrations
                     b.ToTable("AspNetUserRoles");
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>", b =>
                 {
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("LoginProvider")
                         .HasColumnType("nvarchar(450)");
@@ -354,13 +310,28 @@ namespace IssueTracking.Infra.Persistence.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("ProjectUser", b =>
+                {
+                    b.Property<Guid>("ParticipantsProjectsId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ParticipantsProjectsId1")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("ParticipantsProjectsId", "ParticipantsProjectsId1");
+
+                    b.HasIndex("ParticipantsProjectsId1");
+
+                    b.ToTable("ProjectUser");
+                });
+
             modelBuilder.Entity("IssueTracking.Domain.Entities.IssueAggregate.Issue", b =>
                 {
                     b.HasOne("IssueTracking.Domain.Entities.UserAggregate.User", "Assignee")
                         .WithMany()
                         .HasForeignKey("AssigneeId");
 
-                    b.HasOne("IssueTracking.Domain.Entities.ProjectAggregate.Project", null)
+                    b.HasOne("IssueTracking.Domain.Entities.ProjectAggregate.Project", "Project")
                         .WithMany("Issues")
                         .HasForeignKey("ProjectId");
 
@@ -370,45 +341,32 @@ namespace IssueTracking.Infra.Persistence.Migrations
 
                     b.Navigation("Assignee");
 
+                    b.Navigation("Project");
+
                     b.Navigation("Reporter");
                 });
 
-            modelBuilder.Entity("IssueTracking.Domain.Entities.ParticipantsProjects", b =>
+            modelBuilder.Entity("IssueTracking.Domain.Entities.UserAggregate.User", b =>
                 {
-                    b.HasOne("IssueTracking.Domain.Entities.ProjectAggregate.Project", "Projects")
-                        .WithMany("ParticipantsProjects")
-                        .HasForeignKey("ProjectId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                    b.HasOne("IssueTracking.Domain.Entities.ProjectAggregate.Project", "Project")
+                        .WithOne("Owner")
+                        .HasForeignKey("IssueTracking.Domain.Entities.UserAggregate.User", "Id")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("IssueTracking.Domain.Entities.UserAggregate.User", "Participants")
-                        .WithMany("ParticipantsProjects")
-                        .HasForeignKey("UserId");
-
-                    b.Navigation("Participants");
-
-                    b.Navigation("Projects");
+                    b.Navigation("Project");
                 });
 
-            modelBuilder.Entity("IssueTracking.Domain.Entities.ProjectAggregate.Project", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
                 {
-                    b.HasOne("IssueTracking.Domain.Entities.UserAggregate.User", "Owner")
-                        .WithMany()
-                        .HasForeignKey("OwnerId");
-
-                    b.Navigation("Owner");
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
-                {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<System.Guid>", b =>
                 {
                     b.HasOne("IssueTracking.Domain.Entities.UserAggregate.User", null)
                         .WithMany()
@@ -417,7 +375,7 @@ namespace IssueTracking.Infra.Persistence.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<System.Guid>", b =>
                 {
                     b.HasOne("IssueTracking.Domain.Entities.UserAggregate.User", null)
                         .WithMany()
@@ -426,9 +384,9 @@ namespace IssueTracking.Infra.Persistence.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<System.Guid>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -441,11 +399,26 @@ namespace IssueTracking.Infra.Persistence.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>", b =>
                 {
                     b.HasOne("IssueTracking.Domain.Entities.UserAggregate.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("ProjectUser", b =>
+                {
+                    b.HasOne("IssueTracking.Domain.Entities.UserAggregate.User", null)
+                        .WithMany()
+                        .HasForeignKey("ParticipantsProjectsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("IssueTracking.Domain.Entities.ProjectAggregate.Project", null)
+                        .WithMany()
+                        .HasForeignKey("ParticipantsProjectsId1")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -454,12 +427,7 @@ namespace IssueTracking.Infra.Persistence.Migrations
                 {
                     b.Navigation("Issues");
 
-                    b.Navigation("ParticipantsProjects");
-                });
-
-            modelBuilder.Entity("IssueTracking.Domain.Entities.UserAggregate.User", b =>
-                {
-                    b.Navigation("ParticipantsProjects");
+                    b.Navigation("Owner");
                 });
 #pragma warning restore 612, 618
         }

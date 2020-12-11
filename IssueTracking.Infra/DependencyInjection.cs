@@ -1,4 +1,5 @@
-﻿using IssueTracking.Domain.Entities.UserAggregate;
+﻿using System;
+using IssueTracking.Domain.Entities.UserAggregate;
 using IssueTracking.Infra.Persistence;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -15,7 +16,7 @@ namespace IssueTracking.Infra
             {
                 option.UseSqlServer(configuration.GetConnectionString("IssueTrackingConnection"));
             });
-            services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>();
+            services.AddIdentity<User, IdentityRole<Guid>>().AddEntityFrameworkStores<ApplicationDbContext>();
             return services;
         }
     }

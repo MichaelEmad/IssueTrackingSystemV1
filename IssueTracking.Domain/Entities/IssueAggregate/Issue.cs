@@ -1,4 +1,5 @@
-﻿using IssueTracking.Domain.Entities.UserAggregate;
+﻿using IssueTracking.Domain.Entities.ProjectAggregate;
+using IssueTracking.Domain.Entities.UserAggregate;
 using IssueTracking.Domain.Enums;
 using IssueTracking.Domain.Interfaces;
 using JetBrains.Annotations;
@@ -19,7 +20,9 @@ namespace IssueTracking.Domain.Entities.IssueAggregate
 
         [CanBeNull] public User Assignee { get; set; }
 
-        public IssueStatus Status { get; set; }  
+        public IssueStatus Status { get; set; }
+
+        public Project Project { get; set; }
 
         private Issue()
         {

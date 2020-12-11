@@ -16,7 +16,8 @@ namespace IssueTracking.Infra.Persistence.Configuration
             builder.Property(issue => issue.Status).HasDefaultValue(IssueStatus.Todo).HasConversion<string>();
             builder.Property(issue => issue.Description).HasMaxLength(Int32.MaxValue);
             builder.HasOne(issue => issue.Reporter);
-
+            builder.HasOne(issue => issue.Project)
+                .WithMany(project => project.Issues);
         }
     }
 }

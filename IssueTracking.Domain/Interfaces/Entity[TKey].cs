@@ -6,15 +6,14 @@ namespace IssueTracking.Domain.Interfaces
     {
         public TKey Id { get; protected set; }
 
-        public DateTime CreationDate { get; protected set; }
+        public DateTime CreationDate { get; set; }
 
-        public DateTime? ModificationDate { get; protected set; }
+        public DateTime? ModificationDate { get; set; }
 
-        public string CreatedBy { get; protected set; }
+        public string CreatedBy { get; set; }
 
-        public string ModifiedBy { get; protected set; }
+        public string ModifiedBy { get; set; }
 
-        public int SerialNumber { get; set; }
 
         protected Entity()
         {

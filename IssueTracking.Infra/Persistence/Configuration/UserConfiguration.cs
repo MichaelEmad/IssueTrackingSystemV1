@@ -8,6 +8,7 @@ namespace IssueTracking.Infra.Persistence.Configuration
     {
         public void Configure(EntityTypeBuilder<User> builder)
         {
+            
            
         }
     }

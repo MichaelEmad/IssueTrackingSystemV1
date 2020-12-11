@@ -12,11 +12,13 @@ namespace IssueTracking.Domain.Entities.ProjectAggregate
 
         public string Key { get; private set; }
 
+        public int SerialNumber { get; set; }
+
         public User Owner { get; private set; }
 
         public ICollection<Issue> Issues { get; private set; }
 
-        public ICollection<ParticipantsProjects> ParticipantsProjects{ get; private set; }
+        public ICollection<User> ParticipantsProjects { get; private set; }
 
         private Project()
         {
