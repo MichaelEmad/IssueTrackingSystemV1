@@ -4,14 +4,16 @@ using IssueTracking.Infra.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace IssueTracking.Infra.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201211204429_AddProjectAndUserConfiguration")]
+    partial class AddProjectAndUserConfiguration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -101,9 +103,6 @@ namespace IssueTracking.Infra.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("OwnerId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<int>("SerialNumber")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
@@ -114,15 +113,12 @@ namespace IssueTracking.Infra.Persistence.Migrations
                     b.HasIndex("Key")
                         .IsUnique();
 
-                    b.HasIndex("OwnerId");
-
                     b.ToTable("Project");
                 });
 
             modelBuilder.Entity("IssueTracking.Domain.Entities.UserAggregate.User", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("AccessFailedCount")
@@ -350,13 +346,15 @@ namespace IssueTracking.Infra.Persistence.Migrations
                     b.Navigation("Reporter");
                 });
 
-            modelBuilder.Entity("IssueTracking.Domain.Entities.ProjectAggregate.Project", b =>
+            modelBuilder.Entity("IssueTracking.Domain.Entities.UserAggregate.User", b =>
                 {
-                    b.HasOne("IssueTracking.Domain.Entities.UserAggregate.User", "Owner")
-                        .WithMany("Owners")
-                        .HasForeignKey("OwnerId");
+                    b.HasOne("IssueTracking.Domain.Entities.ProjectAggregate.Project", "Project")
+                        .WithOne("Owner")
+                        .HasForeignKey("IssueTracking.Domain.Entities.UserAggregate.User", "Id")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
-                    b.Navigation("Owner");
+                    b.Navigation("Project");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
@@ -428,11 +426,8 @@ namespace IssueTracking.Infra.Persistence.Migrations
             modelBuilder.Entity("IssueTracking.Domain.Entities.ProjectAggregate.Project", b =>
                 {
                     b.Navigation("Issues");
-                });
 
-            modelBuilder.Entity("IssueTracking.Domain.Entities.UserAggregate.User", b =>
-                {
-                    b.Navigation("Owners");
+                    b.Navigation("Owner");
                 });
 #pragma warning restore 612, 618
         }

@@ -5,7 +5,5 @@ namespace IssueTracking.Application.Interfaces
     interface IIdentityService
     {
         Task<string> GetUserNameAsync(string userId);
-
-      
     }
 }

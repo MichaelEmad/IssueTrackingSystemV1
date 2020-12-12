@@ -8,8 +8,6 @@ namespace IssueTracking.Domain.Entities.IssueAggregate
 {
     public class Issue : Entity<string>, IAggregateRoot
     {
-
-
         public IssueType Type { get; private set; }
 
         public string Title { get; private set; }
@@ -30,17 +28,21 @@ namespace IssueTracking.Domain.Entities.IssueAggregate
         }
 
         public Issue(
+            string id,
             IssueType type,
             string title,
             string description,
             User reporter,
+            Project project,
             IssueStatus status = IssueStatus.Todo,
             User assignee = null)
         {
             UpdateIssueDetails(type, title, description);
             UpdateIssueStatus(status);
             UpdateAssignee(assignee);
+            Project = project;
             Reporter = reporter;
+            Id = id;
         }
 
         public void UpdateIssueDetails(IssueType type, string title, string description)
